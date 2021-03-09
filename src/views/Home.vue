@@ -41,9 +41,6 @@ export default {
     ...mapMutations({
       addToCart: 'addToCart'
     }),
-    aaa() {
-      console.log(this.cartItemsIds)
-    }
   }
 }
 </script>

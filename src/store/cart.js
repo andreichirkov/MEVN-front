@@ -1,3 +1,4 @@
+import { getPaymentIntent } from '@/services/payment.service'
 import { sum } from 'ramda'
 
 const mutations = {
@@ -10,9 +11,24 @@ const mutations = {
     } else {
       state.cartItems.push(product)
     }
+  },
+  setPaymentError(state, error) {
+    state.paymentError = error
+  },
+  clearCart(state) {
+    state.cartItems = []
   }
 }
-const actions = {}
+const actions = {
+  async handleBuy({ getters, commit }) {
+    try {
+      const intent = await getPaymentIntent({amount: getters.cartTotalPrice})
+      return intent
+    } catch(err) {
+      commit('setPaymentError', err)
+    }
+  }
+}
 
 const getters = {
   //приходит объект state и сразу деструктуризация
@@ -20,14 +36,16 @@ const getters = {
   cart: ({cart}) => cart,
   cartItems: ({cartItems}) => cartItems,
   //sum сложить все цены которые вернет map в виде массива
-  cartTotalPrice: ({cartItems}) => sum(cartItems.map(item => item.price))
+  cartTotalPrice: ({cartItems}) => sum(cartItems.map(item => item.price)),
+  paymentError: ({ paymentError }) => paymentError
 }
 
 const state = () => ({
   cart: {
     total: 0
   },
-  cartItems: []
+  cartItems: [],
+  paymentError: null
 })
 
 export default {

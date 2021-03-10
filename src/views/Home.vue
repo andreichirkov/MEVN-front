@@ -1,17 +1,22 @@
 <template>
-  <div class="home">
-    <div class="product-list">
-      <ProductCard v-for="(product, key) in products"
-                   :key="key"
-                   :price="product.price"
-                   :imageUrl="product.imageUrl"
-                   :title="product.title"
-                   @add-to-cart="addToCart(product)"
-                   :inCart="cartItemsIds.includes(product._id)"
+  <div class="row">
+    <div
+        v-for="(product, key) in products"
+        :key="key"
+        class="col-lg-4 col-md-6 mb-4"
+    >
+      <ProductCard
+          :title="product.title"
+          :price="product.price"
+          :imageUrl="product.imageUrl"
+          @add-to-cart="addToCart(product)"
+          :inCart="cartItemsIds.includes(product._id)"
+          :description="product.description"
       />
     </div>
   </div>
 </template>
+
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
@@ -46,7 +51,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .product-list {
-    display: flex;
-  }
+
 </style>
